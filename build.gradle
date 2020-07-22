@@ -4,17 +4,18 @@
 plugins {
     id 'java'
     id 'application'
-    id 'com.github.onslip.gradle-one-jar' version '1.0.5'
+//    id 'com.github.onslip.gradle-one-jar' version '1.0.5'
 }
 
-apply plugin: 'gradle-one-jar'
+//apply plugin: 'gradle-one-jar'
 
 /**
  * Project Info
  */
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-version = getVersion()
+//version = getVersion()
+version = 1.0
 mainClassName = 'App'
 
 /**
@@ -48,6 +49,13 @@ def getVersion(){
     return out.toString().replace('\n','')
 }
 
-task PlayStoreUploader(type: OneJar) {
-    mainClass = 'App'
+task unzip(type: Copy) {
+    def zipFile = file('build/distributions/PlayStoreUploader-1.0.zip')
+    def outputDir = file("build/unpacked/dist")
+
+    from zipTree(zipFile)
+    into outputDir
 }
+//task PlayStoreUploader(type: OneJar) {
+//    mainClass = 'App'
+//}
