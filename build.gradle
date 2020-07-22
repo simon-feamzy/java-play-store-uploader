@@ -7,6 +7,8 @@ plugins {
     id 'com.github.onslip.gradle-one-jar' version '1.0.5'
 }
 
+apply plugin: 'gradle-one-jar'
+
 /**
  * Project Info
  */
@@ -44,4 +46,8 @@ def getVersion(){
         standardOutput = out
     }
     return out.toString().replace('\n','')
+}
+
+task PlayStoreUploader(type: OneJar) {
+    mainClass = 'App'
 }
