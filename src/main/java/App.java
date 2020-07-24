@@ -42,6 +42,9 @@ public class App {
     @Option(name = "-apk", required = true, usage = "The apk file to upload")
     private String apkPath;
 
+    @Option(name = "-packageName", required = true, usage = "The packageName in apk")
+    private String packageName;
+
     @Option(name = "-track", required = true, usage = "Release track to use. Eg. alpha, beta, production etc")
     private String trackName;
 
@@ -152,31 +155,31 @@ public class App {
         // load apk file info
         System.out.println("Loading apk file information...");
         Path apkFile = FileSystems.getDefault().getPath(this.apkPath).normalize();
-        ApkFile apkInfo = new ApkFile(apkFile.toFile());
-        ApkMeta apkMeta = apkInfo.getApkMeta();
-        final String applicationName = this.appName == null ? apkMeta.getName() : this.appName;
-        final String packageName = apkMeta.getPackageName();
-        System.out.println(String.format("App Name: %s", apkMeta.getName()));
-        System.out.println(String.format("App Id: %s", apkMeta.getPackageName()));
-        System.out.println(String.format("App Version Code: %d", apkMeta.getVersionCode()));
-        System.out.println(String.format("App Version Name: %s", apkMeta.getVersionName()));
-        apkInfo.close();
+//        ApkFile apkInfo = new ApkFile(apkFile.toFile());
+//        ApkMeta apkMeta = apkInfo.getApkMeta();
+//        final String applicationName = this.appName == null ? apkMeta.getName() : this.appName;
+//        final String packageName = this.packageName==null? apkMeta.getPackageName():this.packageName;
+//        System.out.println(String.format("App Name: %s", apkMeta.getName()));
+//        System.out.println(String.format("App Id: %s", apkMeta.getPackageName()));
+//        System.out.println(String.format("App Version Code: %d", apkMeta.getVersionCode()));
+//        System.out.println(String.format("App Version Name: %s", apkMeta.getVersionName()));
+//        apkInfo.close();
 
         // load release notes
         System.out.println("Loading release notes...");
-        List<LocalizedText> releaseNotes = new ArrayList<LocalizedText>();
+        List<LocalizedText> releaseNotes = new ArrayList<>();
         if (this.notesPath != null) {
             Path notesFile = FileSystems.getDefault().getPath(this.notesPath).normalize();
             String notesContent = new String(Files.readAllBytes(notesFile));
-            releaseNotes.add(new LocalizedText().setLanguage(Locale.US.toString()).setText(notesContent));
+            releaseNotes.add(new LocalizedText().setLanguage(Locale.FRANCE.toString()).setText(notesContent));
         } else if (this.notes != null) {
-            releaseNotes.add(new LocalizedText().setLanguage(Locale.US.toString()).setText(this.notes));
+            releaseNotes.add(new LocalizedText().setLanguage(Locale.FRANCE.toString()).setText(this.notes));
         }
 
         // init publisher
         System.out.println("Initialising publisher service...");
         AndroidPublisher.Builder ab = new AndroidPublisher.Builder(cred.getTransport(), cred.getJsonFactory(), cred);
-        AndroidPublisher publisher = ab.setApplicationName(applicationName).build();
+        AndroidPublisher publisher = ab.setApplicationName(this.appName).build();
 
         // create an edit
         System.out.println("Initialising new edit...");
